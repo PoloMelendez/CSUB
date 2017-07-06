@@ -1,0 +1,22 @@
+Hash Tables
+	
+	Items stored in hash table have a unique identifier.
+	
+	HashCode : an int of an item. If item's unique identifier is
+		   an integer, that identifier can be used as it's
+		   hash code. If the identifier is not an int, use
+		   any function to convert the non-integer to an int.
+	ex:   Smith 1968 03 15
+
+	Hash() : converts a hash code into an index of the array
+		       which we will call hash table.
+
+	collision : if two or more different hash codes convert into
+		    same index of the hash table.
+
+	use 10 as the size for testing purposes.
+
+	collision handling method : 
+	1. Overflowed area
+
+	distance( current add, home add )
