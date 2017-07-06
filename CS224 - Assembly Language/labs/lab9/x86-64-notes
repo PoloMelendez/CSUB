@@ -1,0 +1,158 @@
+ -----------------------------------------
+ x86 family history w/ major technologies 
+ -----------------------------------------
+ 8086. real mode; 16-bit registers (one word=16 bits)
+ 286. 1st generation, 16-bit protected mode; 16-bit registers
+ 386. 32-bit processor+paging+SMM+32-bit GP registers; breaks 1MB RAM limit 
+ Pentium P5. MMX/SIMD + MMX instruction and registers sets 
+ Pentium Pro. 2nd generation paging ; physical memory addressing above 4 GB 
+ Pentium III. SIMD expanded ; SSE instruction set
+ Pentium 4. microarchitecture + hyperthreading
+ Core. virtualization technology added
+ Core 2. 3rd gen paging + IA-32e mode (64-bit register set + 64-bit addressing 
+ Core i7 hyper-threading + up to 8 cores + integrated DRAM controller
+
+        286                       386
+    8 16-bit GPRs             8 32-bit GPRS
+    8bits + 8bits         16 bits +  8bits+8bits
+   ,-----+-------,      ,-----------+----+----,
+   |AH   |   AL  | AX   |           | AH | AL | EAX
+   |-----+-------|      |-----------+----+----|
+   |BH   |   BL  | BX   |           | BH | BL | EBX
+   |-----+-------|      |-----------+----+----|
+   |CH   |   CL  | CX   |           | CH | CL | ECX
+   |-----+-------|      |-----------+----+----|
+   |DH   |   DL  | DX   |           | DH | DL | DCX
+   |-----+-------|      |-----------'----'----|
+   |Source Index | SI   |     Source Index    | ESI                  
+   |-------------|      |---------------------|
+   |Dest. Index  | DI   |     Dest. Index     | EDI
+   |-------------|      | --------------------|
+   |Stack Pointer| SP   |    Stack Pointer    | ESP
+   |-------------|      |---------------------|
+   |Base Pointer | BP   |    Base Pointer     | EBP 
+   '-------------'      '---------------------'
+   
+   
+                      x86-64 
+                  16 32-bit GPRs           
+          32 bits   +   16 bits + 8bits+8bits
+   ,-------------------,---------+-----+-----,
+   |                   | EAX     | AH  | AL  | RAX
+   |-------------------+---------+-----+-----|
+   |                   | EBX     | BH  | BL  | RBX
+   |-------------------+---------+-----+-----|
+   |                   | ECX     | CH  | CL  | RCX
+   |-------------------+---------+-----+-----|
+   |                   | EDX     | DH  | DL  | RDX
+   |-------------------+---------+-----+-----|
+   |      Source Index |        ESI          | RSI                  
+   |-------------------+---------------------|
+   | Destination Index |        EDI          | RDI
+   |-------------------+---------------------|
+   |   Stack Pointer   |        ESP          | rsp
+   |-------------------+---------------------|
+   |  Base Pointer     |        EBP          | rbp
+   |-------------------'---------------------|
+   |                                         | R8
+   |-----------------------------------------|
+   |                                         | R9
+   |-----------------------------------------|
+   |                                         | R10
+   '-----------------------------------------' .
+                      . . .                    . 
+                                               .
+   ,-----------------------------------------.
+   |                                         | R15
+   '-----------------------------------------'
+
+  x86-64 register usage:
+  Arg1-Arg6: RDI, RSI, RDX, RCX, R8 and R9
+  Return Val: RAX
+
+  Behavior of x86-64 stack.
+
+                 ,----------------,       
+  high addresses |- - - - - - - - | <-- rbp (first word in main's call frame)
+             |   |  main's call   | 
+             v   |    frame       |
+   low addresses '----------------' <-- rsp (top of stack)
+   
+   main calls foo.
+   Foo does the following to setup its call frame:
+
+   Step 1. push rbp      
+   ,----------------,       
+   |  main's call   | <- rbp
+   |    frame       |
+   '----------------'
+   |  main's rbp    | 
+   '----------------' <- rsp 
+                
+   Step 2. mov rbp, rsp
+   ,----------------,       
+   |  main's call   |
+   |    frame       |
+   '----------------' 
+   |   main's rbp   | 
+   '----------------' <- rbp and rsp
+                
+   Step 3. sub rsp, 8
+   ,----------------,       
+   |  main's call   |
+   |    frame       |
+   '----------------' 
+   |   main's rbp   | 
+   |----------------| <-- rbp 
+   |    8 btyes     | room for 2 4-byte integers 
+   | of empty space |             
+   '----------------' <-- rsp 
+
+   Step 4. pushfq  ; 64-bit instruction to push quad-word register flags
+   ,----------------,       
+   |  main's call   |
+   |    frame       |
+   '----------------' 
+   |   main's rbp   | 
+   |----------------| <-- rbp 
+   |    8 btyes     | 
+   | of empty space |             
+   |----------------| 
+   | 8 bytes reg flags  
+   '----------------' <-- rsp 
+  
+   Foo then pushes R12-R15 onto the stack.
+
+   Foo can reference the empty space with an offset to rbp:
+   |----------------| <-- rbp 
+   |   1st chunk    |
+   | - - - - - - - -| <-- rbp-4 references 1st 4-byte chunk
+   |   2nd chunk    |             
+   |----------------| <-- rbp-8 references 2nd 4-byte chunk
+         . . .
+
+   Sample usages:
+   lea     rsi, [rbp-8]  ; load address to 2nd chunk into rsi 
+   mov     rdi, [rbp-8]  ; load value in 2nd chunk into rdi 
+          
+ 
+  ////// Before returning foo does this:
+
+   Step 1. mov rsp, rbp
+   ,----------------,       
+   |  main's call   |
+   |    frame       |
+   '----------------' 
+   |   main's rbp   | 
+   '----------------' <-- rbp and rsp
+
+   Step 2.  pop rbp
+   ,----------------,       
+   |  main's call   | <-- rbp
+   |    frame       |
+   '----------------' <-- rsp
+
+   Back to where we started.
+  ////////////
+
+  
