@@ -1,0 +1,5 @@
+ file:lunch.cpp, function:main ,line:20 start of logging
+Starting run function
+Exiting run function final destination was Kentucky Fried Chicken
+Starting selection function
+Exiting the selection function and returning Kentucky Fried Chicken
