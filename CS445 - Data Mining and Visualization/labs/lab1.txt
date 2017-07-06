@@ -1,0 +1,256 @@
+Exercise 1
+1.  pi = 3.1416
+eps = 2.2204e-16
+realmax = 1.7977e+308
+realmin = 2.2251e-308
+
+2.  long format pi = 3.141592653589793
+
+3.  short pi - 3.1416 = -7.3464e-06
+
+4.  Matlab displays the a variable as 1, the b variable includes the trailing zeros. The trailing zeros
+show that more precision is required if the true value of the variable is necessary.
+
+5.  Format long shows more of the trailing zeros, but eps is such a small value that more precision is required.
+
+6.  No, the values are the same. This is because the value of eps in this case is 0. 2 is already greater than 1.
+
+7.  x = 16
+
+8.  sqrt(x) = 4
+x^3 = 4096
+
+9.  theta = 45
+
+10. sin(theta) = 0.8509
+cos(theta) = 0.5253
+matlab is using radians.
+
+    11. a1 is assigned the literal string 'sqrt(4)'
+a2 is assigned the output from the function sqrt(4)
+
+    12. eval(a1) = 2
+    6*eval(a1) = 12
+
+    13. save
+    14. clear
+    15. load
+
+    Exercise 2
+1.  meshPoints = linspace(-1, 1, 1000)
+
+2.  meshPoints(95)
+    -0.8118
+
+    3.  done
+
+4.  numel(meshPoints)
+    1000
+
+5.  plot.jpg
+
+6. done
+
+Exercise 3
+1.  1.5708
+7.0686
+6.2832
+2.  0.0000
+0.7071
+1.0000
+3.  2.0000
+9.7071
+9.0000
+4.  The dimensions didn't match
+5.  13.3876
+6.  69
+95
+88
+7.  done
+8.  done
+9.  done
+10. -9
+11. 7   9   6
+12. 9
+13. Take the max of every vector, then take the max of those.
+14. All mins and maxes came out to 500050
+15.
+tableOfPowers =
+
+0           0           0           0
+1           1           1           1
+2           4           8          16
+3           9          27          81
+4          16          64         256
+5          25         125         625
+6          36         216        1296
+7          49         343        2401
+8          64         512        4096
+9          81         729        6561
+10         100        1000       10000
+16. done
+17. 
+
+tableOfCubes =
+
+0           0
+1           1
+2           8
+3          27
+4          64
+5         125
+6         216
+7         343
+8         512
+9         729
+10        1000
+tableOfEvenCubes =
+
+0           0
+2           8
+4          64
+6         216
+8         512
+10        1000
+tableOfOddFourths =
+
+1           1
+3          81
+5         625
+7        2401
+9        6561
+18. 
+AUL =
+
+    92    99     1     8    15
+    98    80     7    14    16
+     4    81    88    20    22
+    85    87    19    21     3
+    86    93    25     2     9
+AUR =
+
+    67    74    51    58    40
+    73    55    57    64    41
+    54    56    63    70    47
+    60    62    69    71    28
+    61    68    75    52    34
+ALL =
+
+    17    24    76    83    90
+    23     5    82    89    91
+    79     6    13    95    97
+    10    12    94    96    78
+    11    18   100    77    84
+ALR =
+
+    42    49    26    33    65
+    48    30    32    39    66
+    29    31    38    45    72
+    35    37    44    46    53
+    36    43    50    27    59
+19. norm(A-B) = 0
+
+Exercise 4
+1.  yes, the numbers are only 0.0001 off
+2.  done
+3. 
+x =
+    -0.0256 
+x =
+    0
+x =
+    0.0256
+x =
+    0.0513
+x =
+    0.0769
+x =
+    0.1026
+x =
+    0.1282
+x =
+    0.1538
+x =
+    0.1795
+x =
+    0.2051
+x =
+    0.2308
+x =
+    0.2564
+x =
+    0.2821
+x =
+    0.3077
+x =
+    0.3333
+x =
+    0.3590
+x =
+    0.3846
+x =
+    0.4103
+x =
+    0.4359
+x =
+    0.4615
+x =
+    0.4872
+x =
+    0.5128
+x =
+    0.5385
+x =
+    0.5641
+x =
+    0.5897
+x =
+    0.6154
+x =
+    0.6410
+x =
+    0.6667
+x =
+    0.6923
+x =
+    0.7179
+x =
+    0.7436
+x =
+    0.7692
+x =
+    0.7949
+x =
+    0.8205
+x =
+    0.8462
+x =
+    0.8718
+x =
+    0.8974
+x =
+    0.9231
+x =
+    0.9487
+x =
+    0.9744
+x =
+    1.0000
+4.  twice, 0.0128 and 1.7184
+5.  38 times
+
+Exercise 5
+1.  done
+2.  x is the list of the 1000 evenly spaced numbers between -1 and 1, in the equation
+    every number in the list is multiplied by k and the sin is taken. 
+3.  That line is performing the action of summing each term result in the loop.
+4.  a length x length matrix full of zeros is created, where length is the size of the list x.
+5.  Done
+6.  Instead of having overlapping plots, the second plot would delete the existing plot.
+
+Exercise 6
+1.  Done
+2.  Done
+3.  The term needs to start at a number larger than tolerance for the while loop to execute.
+4.  K is used as a counter for the number of while loop iterations, to be displayed after.
+5.  395 iterations
