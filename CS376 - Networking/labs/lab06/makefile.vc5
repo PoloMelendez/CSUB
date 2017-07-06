@@ -1,0 +1,112 @@
+
+#
+# Makefile.vc5:	Makefile for digarp.exe under Windows NT using the
+#		(ugh) Microsoft version 5.0 Visual C++ Compiler.
+#		Remarks:
+#
+#	1. You MUST run /Program Files/DevStudio/VC/bin/vcvars32.bat
+#	   before using "nmake" from the command line with Visual C++
+#	   version 5.0. Note that "vcvars32.bat" has references to
+#	   the CDROM drive which you should comment out.
+#
+#	2. You MUST start each makefile with "!include <win32.mak>"
+#	   with Visual C++ version 5.0.
+#
+#	3. Do NOT pass go and do NOT collect anything (not even $ 0.20).
+#
+#						Marc
+#
+# -------------------------------------------------------------------
+#
+!include <win32.mak>
+
+# cflags is set in win32.mak. In particular, it sets "_WINNT" or
+# "_WIN95" accordingly
+#
+# set libraries:
+LIBS = kernel32.lib oldnames.lib libcmt.lib ws2_32.lib
+
+#
+# set implicit rule
+.c.obj:
+    $(cc) $(cdebug) $(cflags) $(cvarsmt) $*.c
+
+default:	tcp
+pipe:		pipesend.exe
+tcp:		vcsend.exe vcrec.exe
+telnet:		s_tlnt.exe s_sh.exe
+all:		tcp shell pipe daemon.exe s_tlnt.exe
+shell:		s_sh.exe s_daemon.exe
+
+#
+# -------------------------------------------------------------------
+#
+
+vcrec.obj:	vcrec.c diagnost.h \
+			header.h startup.h startup.c cleanup.c
+
+vcrec.exe:	vcrec.obj diagnost.obj
+	    $(link) $(ldebug) $(conlflags) -out:$*.exe $** $(LIBS)
+#
+#
+# -------------------------------------------------------------------
+#
+
+vcsend.obj:	vcsend.c diagnost.h \
+			header.h startup.h startup.c cleanup.c
+
+vcsend.exe:	vcsend.obj diagnost.obj
+	    $(link) $(ldebug) $(conlflags) -out:$*.exe $** $(LIBS)
+#
+# -------------------------------------------------------------------
+#
+
+daemon.obj:	daemon.c diagnost.h \
+			header.h startup.h startup.c cleanup.c
+
+daemon.exe:	daemon.obj diagnost.obj
+	    $(link) $(ldebug) $(conlflags) -out:$*.exe $** $(LIBS)
+
+#
+# -------------------------------------------------------------------
+#
+
+s_daemon.obj:	s_daemon.c diagnost.h \
+			header.h startup.h startup.c cleanup.c
+
+s_daemon.exe:	s_daemon.obj diagnost.obj
+	    $(link) $(ldebug) $(conlflags) -out:$*.exe $** $(LIBS)
+
+s_tlnt.obj:	s_tlnt.c diagnost.h \
+			header.h startup.h startup.c cleanup.c
+
+s_tlnt.exe:	s_tlnt.obj 
+	    $(link) $(ldebug) $(conlflags) -out:$*.exe $** $(LIBS)
+#
+# -------------------------------------------------------------------
+#
+
+pipesend.exe:	pipesend.obj diagnost.obj
+	    $(link) $(ldebug) $(conlflags) -out:$*.exe $** $(LIBS)
+#
+# -------------------------------------------------------------------
+#
+
+s_sh.obj:	s_sh.c diagnost.h \
+			header.h startup.h startup.c cleanup.c
+
+s_sh.exe:	s_sh.obj 
+	    $(link) $(ldebug) $(conlflags) -out:$*.exe $** $(LIBS)
+#
+# -------------------------------------------------------------------
+#
+
+clean:
+		rm -f	*.old
+		rm -f 	*.log
+		rm -f	nullfile
+		-del 	*.obj *.pdb *.ilk
+
+veryclean:	clean
+		-del 	*.exe
+
