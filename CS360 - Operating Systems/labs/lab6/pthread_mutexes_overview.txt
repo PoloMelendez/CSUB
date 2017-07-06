@@ -1,0 +1,56 @@
+                       POSIX Mutex Overview
+
+A POSIX mutex can be used like a sysV binary semaphore but a mutex is not 
+persistent (i.e. it is destroyed when the program exits).  Consequently, a
+mutex can be used (and is preferred) for single processes using multiple 
+threads. It cannot be used to synchronize multiple processes. 
+
+A mutex has two states: unlocked (value=1) and locked (value=0). A mutex can 
+be created and initialized to "unlocked" via
+
+     pthread_mutex_t sync_mutex = PTHREAD_MUTEX_INITIALIZER;
+
+Initialization can also be done explicitly with
+
+     pthread_mutex_init(&sync_mutex, pthread_mutexattr_default);
+
+A POSIX thread in the program can request the lock (blocking until
+it is available), execute a critical section of code (involving 
+access to shared resources) and release the lock as follows
+
+     pthread_mutex_lock(&sync_mutex);  /* entry code */
+     ...          /* critical section */
+     pthread_mutex_unlock(&sync_mutex);  /* exit code */  
+
+One other very useful option with mutexes is "signalling" another thread 
+without using a Unix signal. This is helpful on systems where pthread_kill() 
+has side effects due to non-standard signal handling in multithreaded programs 
+(e.g., solaris).  For example, we could create a flag variable, a mutex and a 
+condition variable via
+
+    int signal_sent_by = 0;
+    pthread_mutex_t lock_mutex = PTHREAD_MUTEX_INITIALIZER;
+    pthread_cond_t condition_met = PTHREAD_COND_INITIALIZER;
+
+One thread could request the lock, update information, set the flag variable 
+to some identifying value, and signal that the condition has now been met with
+
+    pthread_mutex_lock(&lock_mutex);  /* entry code */
+    ...          /* update info */
+    signal_sent_by = MY_ID;      /* any nonzero value */
+    pthread_cond_signal(&condition_met);
+    pthread_mutex_unlock(&lock_mutex);  /* exit code */
+
+The second thread had been waiting in pthread_cond_wait() as follows
+
+    pthread_mutex_lock(&lock_mutex);
+    while(signal_sent_by == 0)
+      pthread_cond_wait(&condition_met, &lock_mutex);
+    ...          /* take action */
+    pthread_mutex_unlock(&lock_mutex);
+
+pthread_cond_wait() is very similar to sigsuspend() in that it temporarily 
+releases the lock as it blocks. This allows the first thread to enter its 
+critical region. When pthread_cond_wait() does return it now has the lock 
+and can take whatever action it needs to before releasing the lock explicitly.
+

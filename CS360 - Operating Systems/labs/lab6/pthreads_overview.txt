@@ -1,0 +1,140 @@
+POSIX Threads:
+
+A POSIX thread is implemented as a procedure accepting a pointer to void
+and returning a pointer to void; so the declaration might be
+
+      void *thread(void *thread_args);
+
+A structure should be declared to hold all the information the thread needs 
+on startup. The thread should copy this information to local 
+variables (i.e., on the stack) right away. Since the same thread code is 
+often used for more than one thread you should pass an identifier to know
+which thread you are. For example
+
+struct	_thread_args {
+	int you_understand;
+	...
+}
+void *thread(void *thread_args)
+	{
+	int i_understand;
+	int *int_pointer;
+	struct _thread_args *thargptr;
+						/* get arguments */
+	thargptr = (struct _thread_args *)thread_args;
+	i_understand = thargptr->you_understand;
+	...
+
+If the thread needs to return information it must return a pointer
+(to some pre-agreed upon data structure) cast as (void *). The
+memory for this data must have been allocated from the data segment,
+NOT from the stack (e.g. use malloc() or global data struct), for
+example
+
+	...
+	int_pointer = (int *)malloc(sizeof(int));
+	*int_pointer = 93;
+	return((void *)int_pointer);	/* pointer to int for creator */
+	}
+
+To create a thread, the creator (e.g. main()) must decide upon setting
+thread attributes with scheduling parameters or whether to just use the 
+defaults. For example
+
+int	main(int argc, char *argv[])
+	{
+	int *return_intpointer;		/* pointer to returned int */
+	struct _thread_args thread_args;/* arguments to thread */
+	pthread_t thread_id;		/* thread id */	
+	pthread_attr_t thread_attr;	/* thread attributes */
+	struct sched_param thread_sched;/* thread scheduling (if used) */
+
+	...
+	thread_args.you_understand = 1;	/* set arguments to thread */
+					/* init attributes.. */
+	pthread_attr_init(&thread_attr);
+					/* ..make any sched changes */
+	thread_sched.sched_priority = 0;
+	pthread_attr_setschedparam(&thread_attr, &thread_sched);
+
+					/* create thread */
+	ret = pthread_create(&thread_id, &thread_attr,
+				thread, (void *)&thread_args);
+	if (ret < 0) fprintf(stderr, "\npthread create failed. ");
+		else fprintf(stderr, "\nthread_id=%u", (unsigned)thread_id);
+
+If you want to use only the default attributes you can simply call
+
+					/* create thread with defaults */
+	ret = pthread_create(&thread_id, (pthread_attr_t *)NULL,
+				thread, (void *)&thread_args);
+
+Once created, a thread will run until it reaches the end of its code or 
+returns. If a thread wishes to yield the CPU to other threads of the same 
+priority it can call sched_yield().
+
+The creator (e.g. main()) has the option of waiting for a thread to 
+finish with (note the double star)
+
+					/* wait for thread to finish */
+	pthread_join(thread_id, (void **)&return_intpointer);
+	fprintf(stderr, "\nthread done: return int=%d, *return_intpointer);
+
+If you don't want any return value this can be simplified to
+
+	pthread_join(thread_id, NULL);
+
+On the other hand the creator can kill a running thread with
+
+	pthread_cancel(thread_id);	/* kill */
+
+On some systems, individual threads can accept signals. Do 
+"man pthread_kill" to check whether this is supported on your system.
+In general your should read the fine print for your system before
+using signals with multithreading.
+
+It is usually necessary to synchronize threads and enforce mutual
+exclusion with regard to shared variables (which are being read
+and written) and this is most easily done with mutexes (see "mutex.txt").
+
+A note on compiler optimization. When a program is compiled with 
+optimization (usually with "-O2") the generated code usually keeps
+loop variables in registers. Suppose for example that the global 
+integer variable more_data occurs in some loop in a thread:
+
+	while(more_data)
+		{
+		...
+		}
+
+Optimization would most likely result in more_data being kept in
+a register. POSIX observes the convention that if such a variable
+occurs in MORE THAN ONE critical region it will NOT be kept in
+a register because if one thread were writing it and another reading
+it the reading thread would always have the old, un-updated, value,
+which would be a disaster.  For example, if we had two threads each 
+with critical regions
+				/* thread 1 */ 
+	pthread_mutex_lock(&more_data_lock);
+	while(more_data)
+		{
+		pthread_mutex_unlock(&more_data_lock);
+		...
+		pthread_mutex_lock(&more_data_lock);
+		}
+	pthread_mutex_unlock(&more_data_lock);
+
+				/* thread 2 */
+	pthread_mutex_lock(&more_data_lock);
+	more_data = 0;
+	pthread_mutex_unlock(&more_data_lock);
+
+then more_data would NOT be kept in a register. If you do NOT want
+to put a global variable in a critical region but the variable is shared 
+by more than one thread you will have to use the C keyword "volatile"
+
+	volatile int more_data;
+
+This keyword tells the compiler that another thread (possibly even
+outside of this process) may be modifying the variable more_data.
+	

@@ -1,0 +1,48 @@
+PTHREAD_KILL(3) 	   Linux Programmer's Manual	       PTHREAD_KILL(3)
+
+NAME
+       pthread_kill - send a signal to a thread
+
+SYNOPSIS
+       #include <signal.h>
+
+       int pthread_kill(pthread_t thread, int sig);
+
+       Compile and link with -pthread.
+
+DESCRIPTION
+       The  pthread_kill()  function  sends  the signal sig to thread, another
+       thread in the same process as the caller.  The signal is asynchronously
+       directed to thread.
+
+       If  sig	is 0, then no signal is sent, but error checking is still per-
+       formed; this can be used to check for the existence of a thread ID.
+
+RETURN VALUE
+       On success, pthread_kill() returns 0; on error,	it  returns  an  error
+       number, and no signal is sent.
+
+ERRORS
+       ESRCH  No thread with the ID thread could be found.
+
+       EINVAL An invalid signal was specified.
+
+CONFORMING TO
+       POSIX.1-2001.
+
+NOTES
+       Signal dispositions are process-wide: if a signal handler is installed,
+       the handler will be invoked in the thread thread, but if  the  disposi-
+       tion  of  the signal is "stop", "continue", or "terminate", this action
+       will affect the whole process.
+
+SEE ALSO
+       kill(2)	sigaction(2),  sigpending(2),  pthread_self(3),   pthread_sig-
+       mask(3), raise(3), pthreads(7), signal(7)
+
+COLOPHON
+       This  page  is  part of release 3.27 of the Linux man-pages project.  A
+       description of the project, and information about reporting  bugs,  can
+       be found at http://www.kernel.org/doc/man-pages/.
+
+Linux				  2009-01-28		       PTHREAD_KILL(3)

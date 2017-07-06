@@ -1,0 +1,105 @@
+execve("./lab01", ["./lab01"], [/* 22 vars */]) = 0
+brk(0)                                  = 0x116d000
+access("/etc/ld.so.nohwcap", F_OK)      = -1 ENOENT (No such file or directory)
+mmap(NULL, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f139c1f0000
+access("/etc/ld.so.preload", R_OK)      = -1 ENOENT (No such file or directory)
+open("/etc/ld.so.cache", O_RDONLY)      = 3
+fstat(3, {st_mode=S_IFREG|0644, st_size=115019, ...}) = 0
+mmap(NULL, 115019, PROT_READ, MAP_PRIVATE, 3, 0) = 0x7f139c1d3000
+close(3)                                = 0
+access("/etc/ld.so.nohwcap", F_OK)      = -1 ENOENT (No such file or directory)
+open("/lib/x86_64-linux-gnu/libc.so.6", O_RDONLY) = 3
+read(3, "\177ELF\2\1\1\0\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0\300\357\1\0\0\0\0\0"..., 832) = 832
+fstat(3, {st_mode=S_IFREG|0755, st_size=1599504, ...}) = 0
+mmap(NULL, 3713112, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0x7f139bc48000
+mprotect(0x7f139bdca000, 2093056, PROT_NONE) = 0
+mmap(0x7f139bfc9000, 20480, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x181000) = 0x7f139bfc9000
+mmap(0x7f139bfce000, 18520, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x7f139bfce000
+close(3)                                = 0
+mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f139c1d2000
+mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f139c1d1000
+mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f139c1d0000
+arch_prctl(ARCH_SET_FS, 0x7f139c1d1700) = 0
+mprotect(0x7f139bfc9000, 16384, PROT_READ) = 0
+mprotect(0x7f139c1f2000, 4096, PROT_READ) = 0
+munmap(0x7f139c1d3000, 115019)          = 0
+getpid()                                = 11751
+geteuid()                               = 11316
+getuid()                                = 11316
+fstat(1, {st_mode=S_IFCHR|0620, st_rdev=makedev(136, 62), ...}) = 0
+mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f139c1ef000
+write(1, "BEFORE FORK:\n", 13)          = 13
+getppid()                               = 11750
+write(1, "userid 11316, effective userid 1"..., 66) = 66
+write(1, "Value of stuff at address 0x600e"..., 41) = 41
+clone(Process 11752 attached
+child_stack=0, flags=CLONE_CHILD_CLEARTID|CLONE_CHILD_SETTID|SIGCHLD, child_tidptr=0x7f139c1d19d0) = 11752
+[pid 11751] write(1, "PARENT: Value of stuff at addres"..., 48 <unfinished ...>
+[pid 11752] write(1, "CHILD: Value of stuff at address"..., 47 <unfinished ...>
+[pid 11751] <... write resumed> )       = 48
+[pid 11752] <... write resumed> )       = 47
+[pid 11751] write(1, "stuff: 2\n", 9 <unfinished ...>
+[pid 11752] geteuid( <unfinished ...>
+[pid 11751] <... write resumed> )       = 9
+[pid 11752] <... geteuid resumed> )     = 11316
+[pid 11751] rt_sigprocmask(SIG_BLOCK, [CHLD],  <unfinished ...>
+[pid 11752] getuid( <unfinished ...>
+[pid 11751] <... rt_sigprocmask resumed> [], 8) = 0
+[pid 11752] <... getuid resumed> )      = 11316
+[pid 11751] rt_sigaction(SIGCHLD, NULL,  <unfinished ...>
+[pid 11752] getppid( <unfinished ...>
+[pid 11751] <... rt_sigaction resumed> {SIG_DFL, [], 0}, 8) = 0
+[pid 11752] <... getppid resumed> )     = 11751
+[pid 11751] rt_sigprocmask(SIG_SETMASK, [],  <unfinished ...>
+[pid 11752] write(1, "Child Info: uid 11316 , euid 113"..., 59 <unfinished ...>
+[pid 11751] <... rt_sigprocmask resumed> NULL, 8) = 0
+[pid 11752] <... write resumed> )       = 59
+[pid 11751] nanosleep({1, 0},  <unfinished ...>
+[pid 11752] write(1, "stuff: 1\n", 9)   = 9
+[pid 11752] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 11752] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 11752] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 11752] nanosleep({2, 0},  <unfinished ...>
+[pid 11751] <... nanosleep resumed> 0x7fff3159a420) = 0
+[pid 11751] write(1, "stuff: 4\n", 9)   = 9
+[pid 11751] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 11751] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 11751] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 11751] nanosleep({1, 0},  <unfinished ...>
+[pid 11752] <... nanosleep resumed> 0x7fff3159a420) = 0
+[pid 11751] <... nanosleep resumed> 0x7fff3159a420) = 0
+[pid 11752] write(1, "stuff: 3\n", 9 <unfinished ...>
+[pid 11751] write(1, "stuff: 6\n", 9 <unfinished ...>
+[pid 11752] <... write resumed> )       = 9
+[pid 11751] <... write resumed> )       = 9
+[pid 11751] rt_sigprocmask(SIG_BLOCK, [CHLD],  <unfinished ...>
+[pid 11752] rt_sigprocmask(SIG_BLOCK, [CHLD],  <unfinished ...>
+[pid 11751] <... rt_sigprocmask resumed> [], 8) = 0
+[pid 11752] <... rt_sigprocmask resumed> [], 8) = 0
+[pid 11751] rt_sigaction(SIGCHLD, NULL,  <unfinished ...>
+[pid 11752] rt_sigaction(SIGCHLD, NULL,  <unfinished ...>
+[pid 11751] <... rt_sigaction resumed> {SIG_DFL, [], 0}, 8) = 0
+[pid 11752] <... rt_sigaction resumed> {SIG_DFL, [], 0}, 8) = 0
+[pid 11751] rt_sigprocmask(SIG_SETMASK, [],  <unfinished ...>
+[pid 11752] rt_sigprocmask(SIG_SETMASK, [],  <unfinished ...>
+[pid 11751] <... rt_sigprocmask resumed> NULL, 8) = 0
+[pid 11752] <... rt_sigprocmask resumed> NULL, 8) = 0
+[pid 11751] nanosleep({1, 0},  <unfinished ...>
+[pid 11752] nanosleep({2, 0},  <unfinished ...>
+[pid 11751] <... nanosleep resumed> 0x7fff3159a420) = 0
+[pid 11751] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 11751] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 11751] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 11751] nanosleep({10, 0},  <unfinished ...>
+[pid 11752] <... nanosleep resumed> 0x7fff3159a420) = 0
+[pid 11752] write(1, "stuff: 5\n", 9)   = 9
+[pid 11752] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 11752] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 11752] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 11752] nanosleep({2, 0}, 0x7fff3159a420) = 0
+[pid 11752] exit_group(33)              = ?
+Process 11752 detached
+<... nanosleep resumed> {6, 998604583}) = ? ERESTART_RESTARTBLOCK (To be restarted)
+--- SIGCHLD (Child exited) @ 0 (0) ---
+restart_syscall(<... resuming interrupted call ...>) = 0
+exit_group(0)                           = ?
