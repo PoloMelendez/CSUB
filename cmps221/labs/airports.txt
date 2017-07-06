@@ -1,0 +1,5 @@
+BFL	Bakersfield	1
+LGA	La-Guardia	4
+LAX	Los_Angeles	6
+FAT	Fresno  	2
+IAH	Houston  	5	
