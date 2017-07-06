@@ -1,0 +1,9 @@
+1.  What is the difference between ground truth and a predicted label?
+    
+    The ground truth is the label that is known to be correct, the predicted label is the label assigned by the expert system.
+
+2.  Consider  the  rule  given  in  the  background  section  for  the  iris  data  set.  
+    Examine  the  data  in  iris.csv and  manually  apply  the  rule  to  the  petal  length (column  one).  
+    What  performance  do  you  expect  to achieve with this rule?
+    
+    As is the given rule will fail 15 out of the 100 sets up data.    
